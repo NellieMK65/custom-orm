@@ -21,6 +21,7 @@ class Meeting:
         self.host = host
         self.time = time
 
+    # returns a printable text of the class instance
     def __repr__(self) -> str:
         return f"<Meeting {self.id} -> Venue:{self.venue}, Host:{self.host}, Time:{self.time}, Members:{self.members}>"
 
@@ -35,6 +36,17 @@ class Meeting:
 
         print(f"Meeting created")
 
+    def update(self):
+        sql = f"""
+            UPDATE {self.TABLE_NAME}
+            SET venue = ?, host = ?, time = ?, members = ?
+            WHERE id = ?
+        """
+
+        cursor.execute(sql, (self.venue, self.host, self.time, self.members, self.id))
+        conn.commit()
+        print(f"Meeting {self.id} updated")
+
     @classmethod
     def find_one(cls, id):
         sql = f"""
@@ -48,6 +60,12 @@ class Meeting:
             return None
 
         return cls.row_to_instance(row)
+
+    @classmethod
+    def find_all(cls):
+        rows = cursor.execute(f"SELECT * FROM {cls.TABLE_NAME}").fetchall()
+
+        return [cls.row_to_instance(row) for row in  rows]
 
     @classmethod
     def row_to_instance(cls, row):
@@ -94,10 +112,16 @@ Meeting.create_table()
 # Meeting.alter_table("members", "STRING")
 
 
-python_catchup = Meeting("Remote", "Joel,Dennis", "Nelson", "2-3pm")
+# python_catchup = Meeting("Room 302", "Jane, John", "Andrew", "9-10am")
 
 # python_catchup.save()
 
-meeting = Meeting.find_one(1)
+# meeting = Meeting.find_one(1)
 
-print(meeting.members)
+# meeting.members = "Eddah, George"
+
+# meeting.update()
+
+# print(meeting.members)
+
+# print(Meeting.find_all())

@@ -57,3 +57,36 @@
 
 # Start of app logic
 from models.meeting import Meeting
+
+
+def app():
+    while True:
+        print(f"Welcome meeting management app")
+
+        print("1. Create meeting")
+        print("2. Update meeting")
+        print("3. Get single meeting")
+        print("4. Get all meetings")
+
+        choice = input("Enter your choice to continue: ")
+
+        if choice == "1":
+            print("=======Creating meeting======== \n")
+            host = input("Enter meeting host: ")
+            members = input("Enter meeting members: ")
+            time = input("Enter meeting time: ")
+            venue = input("Enter the venue: ")
+
+            meeting = Meeting(venue, members, host, time)
+            meeting.save()
+
+        elif choice == "3":
+            print("======Getting a single meeting====== \n")
+            meeting_id = input("Enter meeting id: ")
+
+            meeting = Meeting.find_one(meeting_id)
+
+            print(meeting)
+
+
+app()
