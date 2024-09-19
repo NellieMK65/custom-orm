@@ -47,6 +47,15 @@ class Meeting:
         conn.commit()
         print(f"Meeting {self.id} updated")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "venue": self.venue,
+            "host": self.host,
+            "members": self.members,
+            "time": self.time
+        }
+
     @classmethod
     def find_one(cls, id):
         sql = f"""

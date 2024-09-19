@@ -57,7 +57,12 @@
 
 # Start of app logic
 from models.meeting import Meeting
+from rich import print
+from rich.json import JSON
+from rich.console import Console
+from rich.table import Table
 
+console = Console()
 
 def app():
     while True:
@@ -86,7 +91,24 @@ def app():
 
             meeting = Meeting.find_one(meeting_id)
 
-            print(meeting)
+            console.print(meeting.to_dict())
+
+        elif choice == "4":
+            print("=======Getting all meetings======\n")
+            meetings = Meeting.find_all()
+
+            table = Table(title="All Meetings")
+
+            table.add_column("Id", style="magenta")
+            table.add_column("Venue")
+            table.add_column("Host")
+            table.add_column("Members")
+            table.add_column("Time")
+
+            for meeting in meetings:
+                table.add_row(str(meeting.id), meeting.venue, meeting.host, meeting.members, meeting.time)
+
+            console.print(table)
 
 
 app()
